@@ -12,13 +12,16 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
+    // Handle form submission
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $conn->real_escape_string($_POST['name']);
         $review_content = $conn->real_escape_string($_POST['review_content']);
 
+        // Insert review into the database
         $sql = "INSERT INTO review (name, review_content) VALUES ('$name', '$review_content')";
 
         if ($conn->query($sql) === TRUE) {
+            // Redirect to prevent form resubmission
             header("Location: " . $_SERVER['PHP_SELF']);
             exit();
         } else {
@@ -26,6 +29,7 @@
         }
     }
 
+    // Fetch reviews from the database
     $sql = "SELECT name, review_content FROM review";
     $result = $conn->query($sql);
 
